@@ -1,16 +1,18 @@
-const Contact = require("../models/contact");
-const { validationResult } = require("express-validator");
+import {Request, Response, RequestHandler} from "express"
+import Contact, {IContact} from "../models/contact"
+import { validationResult, ValidationError, Result } from "express-validator"
 
-exports.craeteContact = async (req, res) => {
+
+const craeteContact: RequestHandler = async (req: Request, res: Response) => {
   //check errors
-  const errores = validationResult(req);
+  const errores:Result<ValidationError> = validationResult(req);
   if (!errores.isEmpty()) {
     return res.status(400).json({ errors: errores.array() });
   }
 
   try {
     //Create new Contact
-    const contact = new Contact(req.body);
+    const contact: IContact = new Contact(req.body);
 
     //Save and Return contact
     contact.save();
@@ -22,10 +24,10 @@ exports.craeteContact = async (req, res) => {
 };
 
 //getAllContact Return all contact in DB
-exports.getAllContact = async (req, res) => {
+const getAllContact: RequestHandler = async (req: Request, res: Response) => {
   try {
     //Get all info
-    const contacts = await Contact.find().sort({ name: -1 });
+    const contacts: IContact[] = await Contact.find().sort({ name: -1 });
 
     //return the info
     res.json({ contacts });
@@ -34,10 +36,10 @@ exports.getAllContact = async (req, res) => {
     res.status(500).send("hubo un error");
   }
 };
-exports.deleteContact = async (req, res) => {
+const deleteContact: RequestHandler = async (req: Request, res: Response) => {
   try {
     //Get the project
-    let contact = await Contact.findById(req.params.id);
+    let contact: IContact = await Contact.findById(req.params.id);
 
     //If exists the contact
     if (!contact) {
@@ -52,3 +54,5 @@ exports.deleteContact = async (req, res) => {
     res.status(500).send("Error in server deleting the contact");
   }
 };
+
+export default {craeteContact, getAllContact, deleteContact}
