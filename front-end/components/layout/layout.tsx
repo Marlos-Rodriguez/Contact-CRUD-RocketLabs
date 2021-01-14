@@ -1,7 +1,9 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 import Head from "next/head";
 
-const Layout = (props) => {
+import type {ChildrenProp} from "../Interfaces/contacts"
+
+const Layout: FunctionComponent<ChildrenProp> = ({children}) => {
   return (
     <>
       <Head>
@@ -19,7 +21,7 @@ const Layout = (props) => {
         <meta name="Description" content="Contact CRUD made with MERN stack + Next JS in Front" />
       </Head>
 
-      <main>{props.children}</main>
+      <main>{children}</main>
     </>
   );
 };

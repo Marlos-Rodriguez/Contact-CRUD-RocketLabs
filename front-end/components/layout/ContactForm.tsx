@@ -1,19 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, FunctionComponent } from "react";
+
+import type {TFormEvent} from '../Interfaces/contacts'
 
 import { FormStyle, Field, InputSubmit, Error } from "../../styles/form";
 
 import FormHook from "../../utils/formHooks";
 
-const ContactForm = ({ AddContact }) => {
+interface FormProps {
+  AddContact: Function
+}
+
+type FormValues = {
+  name: string,
+    nickname: string,
+    email: string,
+}
+
+const ContactForm: FunctionComponent<FormProps> = ({ AddContact }) :JSX.Element => {
   const [error, setError] = useState("");
 
-  const { onChange, values } = FormHook(AddContact, {
+  const basVal:FormValues = {
     name: "",
     nickname: "",
     email: "",
-  });
+  }
 
-  const CheckValues = (e) => {
+  const { onChange, values } = FormHook(AddContact, basVal);
+
+  const CheckValues = (e:TFormEvent) => {
     e.preventDefault();
     if (values.name.trim() === "" || values.nickname.trim() === "" || values.email.trim() === "") {
       setError("All Fields are required");

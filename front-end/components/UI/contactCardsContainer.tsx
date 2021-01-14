@@ -1,9 +1,11 @@
-import React from "react";
+import React, {FunctionComponent} from "react";
 
 import styled from "styled-components";
 
-const ContactCardsContainer = (props) => {
-  return <CardContainer>{props.children}</CardContainer>;
+import type {ChildrenProp} from "../Interfaces/contacts"
+
+const ContactCardsContainer: FunctionComponent<ChildrenProp> = ({children}) => {
+  return <CardContainer>{children}</CardContainer>;
 };
 
 const CardContainer = styled.div`

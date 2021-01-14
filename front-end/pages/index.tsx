@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
-import styled from "styled-components";
+import {LoadingText, CreateButton} from "../styles/index"; 
+
+import type {IContact, INewContact} from "../components/Interfaces/contacts"
 
 import axiosClient from "../config/axiosClient";
 import Layout from "../components/layout/layout";
@@ -9,32 +11,9 @@ import ContactCard from "../components/layout/contactCard";
 import ContactCardsContainer from "../components/UI/contactCardsContainer";
 import ContactForm from "../components/layout/ContactForm";
 
-const LoadingText = styled.h1`
-  color: #f1f6f9;
-  text-align: center;
-  font-size: 5rem;
-  padding-top: 3rem;
-  margin: 0 auto;
-`;
-
-const CreateButton = styled.button`
-  position: relative;
-  text-align: center;
-  margin: 0 auto;
-  padding: 0.5rem;
-  left: 43%;
-  color: #14274e;
-  background-color: #f1f6f9;
-  font-weight: bold;
-  font-size: 1.7rem;
-  border: none;
-  border-radius: 1rem;
-  cursor: pointer;
-`;
-
-export default function Home() {
+const Home = () => {
   //Main State of App
-  const [Contacts, setContacts] = useState([]);
+  const [Contacts, setContacts] = useState<IContact[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
 
@@ -42,7 +21,7 @@ export default function Home() {
   const FetchData = async () => {
     try {
       const result = await axiosClient.get("/contacts/all");
-      const Newcontacts = result.data.contacts;
+      const Newcontacts: IContact[] = result.data.contacts;
 
       setLoading(false);
       setContacts(Newcontacts);
@@ -51,10 +30,10 @@ export default function Home() {
     }
   };
 
-  const AddContact = async (contact) => {
+  const AddContact = async (contact:INewContact) => {
     try {
       const response = await axiosClient.post("/contacts/", contact);
-      const newContact = response.data;
+      const newContact:IContact = response.data;
 
       setContacts([...Contacts, newContact]);
       ShowFormFunc();
@@ -63,7 +42,7 @@ export default function Home() {
     }
   };
 
-  const DeleteContact = async (id) => {
+  const DeleteContact = async (id:string) => {
     try {
       await axiosClient.delete(`/contacts/${id}`);
 
@@ -113,3 +92,5 @@ export default function Home() {
     </Layout>
   );
 }
+ 
+export default Home;
